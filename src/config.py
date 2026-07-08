@@ -22,16 +22,16 @@ def get_light_llm():
     
     if APP_ENV == "development":
         return ChatOllama(model="qwen2.5:14b", temperature=0.2)
-    return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite", google_api_key=GOOGLE_API_KEY, temperature=0)
-    # return ChatGroq(model="llama-3.3-70b-versatile", groq_api_key = GROQ_API_KEY, temperature=0)
+    # return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite", google_api_key=GOOGLE_API_KEY, temperature=0)
+    return ChatGroq(model="llama-3.3-70b-versatile", groq_api_key = GROQ_API_KEY, temperature=0)
 
 def get_moderate_llm():
     """Returns the Moderate LLM used for intake, explanations and summarizations."""
 
     if APP_ENV == "development":
         return ChatOllama(model="qwen2.5:14b", temperature=0.2)
-    return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite", google_api_key=GOOGLE_API_KEY, temperature=0.2)
-    # return ChatGroq(model="llama-3.3-70b-versatile", groq_api_key = GROQ_API_KEY, temperature=0)
+    # return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite", google_api_key=GOOGLE_API_KEY, temperature=0.2)
+    return ChatGroq(model="llama-3.3-70b-versatile", groq_api_key = GROQ_API_KEY, temperature=0)
 
 def get_heavy_llm():
     """Returns the Heavy LLM used for deep differential diagnosis reasoning."""

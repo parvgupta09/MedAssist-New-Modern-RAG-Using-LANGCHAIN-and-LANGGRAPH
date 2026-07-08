@@ -24,6 +24,21 @@ router = APIRouter(prefix="/chat", tags=["Triage Chat"])
 app_graph = build_triage_graph()
 
 
+def extract_extracted_content(content) -> str:
+    "Normalizes the  AI Message content into the plain string"
+
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts= []
+        for block in content:
+            if isinstance(block, dict) and "text" in block:
+                parts.append(block["text"])
+            elif isinstance(block, str):
+                parts.append(block)
+        return "\n".join(parts)
+    return str(content)
+
 def _run_graph_on_new_session(user: User, forwarded_message: str, user_location: str, db: Session) -> ChatMessageResponse:
     """Created the brand new session for the user"""
 
@@ -63,7 +78,7 @@ def _run_graph_on_new_session(user: User, forwarded_message: str, user_location:
     }
 
     output_state = app_graph.invoke(current_state)
-    ai_reply = output_state["messages"][-1].content
+    ai_reply = extract_extracted_content(output_state["messages"][-1].content)
 
     ai_msg_db = ChatMessage(session_id=new_session.session_id, sender="assistant", content=ai_reply)
     db.add(ai_msg_db)
@@ -176,8 +191,8 @@ def handle_message(payload: ChatMessageRequest, db: Session = Depends(get_db)):
         "historical_summary": user.medical_summary or "",
         "current_timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
         "current_symptoms": [],
-        "retrieved_diseases": [],
-        "final_diagnoses": [],
+        "retrieved_diseases": session.retrieved_diseases or [],
+        "final_diagnoses": session.final_diagnoses or [],
         "user_location": payload.user_location or "Unknown Location",
         "user_age": user.age,
         "user_gender": user.gender or "Unspecified",
@@ -196,7 +211,7 @@ def handle_message(payload: ChatMessageRequest, db: Session = Depends(get_db)):
         db.commit()
         return _run_graph_on_new_session(user, output_state["forward_message"], payload.user_location, db)
     
-    ai_reply = output_state["messages"][-1].content
+    ai_reply = extract_extracted_content(output_state["messages"][-1].content)
     ai_msg_db = ChatMessage(session_id=payload.session_id, sender="assistant", content=ai_reply)
     db.add(ai_msg_db)
 

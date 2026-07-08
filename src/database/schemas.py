@@ -53,7 +53,7 @@ class ChatMessageResponse(BaseModel):
 
     session_id: UUID
     bot_reply: str
-    current_diagonses: Optional[List[str]] = None
+    current_diagnoses: Optional[List[str]] = None
     report_url: Optional[str] = None
     redirect_to_new_chat: bool = False
     forward_message: Optional[str] = None
@@ -65,7 +65,7 @@ class ReportResponse(BaseModel):
     report_id: UUID
     session_id: UUID
     file_path: str
-    top_diagonses: Optional[dict[str, Any]] = None
+    top_diagnoses: Optional[dict[str, Any]] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

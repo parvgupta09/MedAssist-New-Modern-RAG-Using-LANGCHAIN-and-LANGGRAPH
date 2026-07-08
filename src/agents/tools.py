@@ -37,4 +37,17 @@ def search_local_doctors(diseases: list, location: str) -> list:
             results.append(f"{name} ({address}) - Rating: {rating}/5")
         return results if results else [f"No highly rated {speciality} found in your area."]
     else:
+        print(f"CRITICAL API ERROR - Status Code: {response.status_code}")
+        print(f"CRITICAL API ERROR - Details: {response.text}")
         return ["Error connecting to the google places API. Please try again later."]
+    
+# --- DEBUG TEST ---
+if __name__ == "__main__":
+    test_diseases = ["Migraine", "Tension Headache"]
+    test_location = "Jaipur, India" # Hardcode a real city here
+    
+    print("Fetching doctors...")
+    results = search_local_doctors(test_diseases, test_location)
+    
+    for r in results:
+        print(r)

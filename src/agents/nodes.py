@@ -160,7 +160,15 @@ def explaination_node(state: TriageState):
 
     response = moderate_llm.invoke(messages_to_send)
 
-    return {"messages":[response], "next_action":"doctor_route"}
+    raw_content = response.content
+    if isinstance(raw_content, list):
+        raw_content = '\n'.join(
+            block.get("text", "") if isinstance(block, dict) else str(block) for block in raw_content
+        ).strip()
+
+    clean_message = AIMessage(content=raw_content)
+
+    return {"messages":[clean_message], "next_action":"doctor_route"}
 
 
 def summarize_node(state: TriageState):
