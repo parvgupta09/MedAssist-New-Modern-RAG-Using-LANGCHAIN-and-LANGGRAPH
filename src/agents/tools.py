@@ -1,4 +1,4 @@
-# This is the script that handles the Gogle Places API and find the relevant doctor/clinic recommendations for the patient based on the top 3 possible medical diagnosed diseases.
+# This is the script that handles the Google Places API and find the relevant doctor/clinic recommendations for the patient based on the top 3 possible medical diagnosed diseases.
 
 import requests
 from langchain_core.messages import HumanMessage
@@ -36,6 +36,7 @@ def search_local_doctors(diseases: list, location: str) -> list:
 
             results.append(f"{name} ({address}) - Rating: {rating}/5")
         return results if results else [f"No highly rated {speciality} found in your area."]
+
     else:
         print(f"CRITICAL API ERROR - Status Code: {response.status_code}")
         print(f"CRITICAL API ERROR - Details: {response.text}")
@@ -44,7 +45,7 @@ def search_local_doctors(diseases: list, location: str) -> list:
 # --- DEBUG TEST ---
 if __name__ == "__main__":
     test_diseases = ["Migraine", "Tension Headache"]
-    test_location = "Jaipur, India" # Hardcode a real city here
+    test_location = "Mansarovar, Jaipur, India" # Hardcode a real city here
     
     print("Fetching doctors...")
     results = search_local_doctors(test_diseases, test_location)

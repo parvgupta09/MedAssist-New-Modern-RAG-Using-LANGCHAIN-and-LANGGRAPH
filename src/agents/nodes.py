@@ -76,10 +76,16 @@ def intake_node(state: TriageState):
     # Convert the text into an AIMessage to save it to the chat history.
     ai_message = AIMessage(content=response.reply_to_user)
 
-    if response.is_ready_for_search:
-        return {"messages":[ai_message], "next_action":"retrieve"}
+    update = {"messages":[ai_message]}
+
+    if response.extracted_age > 0:
+        update["user_age"] = response.extracted_age
+    if response.extracted_gender:
+        update["user_gender"] = response.extracted_gender
+
+    update["next_action"] = "retrieve" if response.is_ready_for_search else "ask_more"
     
-    return {"messages":[ai_message], "next_action":"ask_more"}
+    return update
 
 
 def retrieve_node(state: TriageState):
@@ -213,7 +219,8 @@ def doctor_routing_node(state: TriageState):
         closing_msg = AIMessage(content="Understood. Your final report is ready. Please take care, and don't hesitate to consult a doctor if your symptoms are worsening.")
         return {
             "messages": [closing_msg],
-            "next_action": "end"
+            "next_action": "end",
+            "wants_doctor": False
         }
 
     if decision.wants_doctor:
@@ -231,7 +238,9 @@ def doctor_routing_node(state: TriageState):
 
         return {
             "messages": [response],
-            "next_action": "summarize"        
+            "next_action": "summarize",
+            "wants_doctor": True,
+            "recommended_doctors": api_results
         }
 
     normal_reply = moderate_llm.invoke(messages_to_send)

@@ -26,6 +26,8 @@ class IntakeOutput(BaseModel):
     is_ready_for_search: bool = Field(
         description="Set to true ONLY if you have gathered enough symptoms, duration, and context to search a medical database. Otherwise, set to false."
     )
+    extracted_age: int = Field(default=-1, description="The patient's age in years if they mentioned it in their latest message. Use -1 if not mentioned.")
+    extracted_gender: str = Field(default="", description="The patient's gender if they mentioned it in their latest message (e.g. 'male', 'female'). Use empty string if not mentioned.")
 
 
 class DiagnosisOutput(BaseModel):

@@ -13,6 +13,7 @@ load_dotenv()
 # If we set APP_ENV to "production" it will use all the production LLMs rather than using the local Ollama LLMs.
 APP_ENV = os.getenv("APP_ENV","production")
 
+LOCATIONIQ_API_KEY = os.getenv("LOCATIONIQ_API_KEY")
 GOOGLE_PLACES_API_KEY = os.getenv("GOOGLE_PLACES_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")

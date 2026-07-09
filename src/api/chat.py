@@ -43,14 +43,14 @@ def _run_graph_on_new_session(user: User, forwarded_message: str, user_location:
     """Created the brand new session for the user"""
 
     now = datetime.now(timezone.utc)
-    new_session = TriageSession(user_id=user.id, start_time=now, updated_at=now)
+    new_session = TriageSession(user_id=user.user_id, start_time=now, updated_at=now)
     db.add(new_session)
     db.commit()
     db.refresh(new_session)
 
     greeting = ChatMessage(
         session_id = new_session.session_id,
-        sender = "AI",
+        sender = "assistant",
         content = "Hello! I am your medical triage assistant. Please describe your symptoms you are experiencing today."
 
     )
@@ -68,8 +68,8 @@ def _run_graph_on_new_session(user: User, forwarded_message: str, user_location:
         "current_symptoms": [],
         "retrieved_diseases": [],
         "final_diagnoses": [],
-        "user_age": user.age,
-        "user_gender": user.gender or "Unspecified",
+        "user_age": user.age or -1,
+        "user_gender": user.gender or "",
         "user_location": user_location or "Unknown Location",
         "recommended_doctors": [],
         "redirect_to_new_chat": False,
@@ -194,8 +194,8 @@ def handle_message(payload: ChatMessageRequest, db: Session = Depends(get_db)):
         "retrieved_diseases": session.retrieved_diseases or [],
         "final_diagnoses": session.final_diagnoses or [],
         "user_location": payload.user_location or "Unknown Location",
-        "user_age": user.age,
-        "user_gender": user.gender or "Unspecified",
+        "user_age": user.age or -1,
+        "user_gender": user.gender or "",
         "recommended_doctors": [],
         "redirect_to_new_chat": False,
         "forward_message": "",
@@ -203,6 +203,12 @@ def handle_message(payload: ChatMessageRequest, db: Session = Depends(get_db)):
     }
 
     output_state = app_graph.invoke(current_state)
+
+    if output_state.get("user_age") and output_state["user_age"] > 0 and output_state["user_age"] != user.age:
+        user.age = output_state["user_age"]
+
+    if output_state.get("user_gender") and output_state["user_gender"] != user.gender:
+        user.gender = output_state["user_gender"]
 
     if output_state.get("redirect_to_new_chat") and output_state.get("forward_message"):
         session.status = "completed"
