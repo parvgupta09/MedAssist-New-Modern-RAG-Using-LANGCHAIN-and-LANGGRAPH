@@ -34,7 +34,7 @@ heavy_llm = get_heavy_llm()
 def guardrail_node(state: TriageState):
     """Checks is the user's message indicates a severe medical emergency. If so, it instructs the user to call emergency services and ends the chat."""
 
-    recent_messages = state["messages"][-4:]
+    recent_messages = state["messages"][0:]
     context_text = "\n".join(f"{type(m).__name__}: {m.content}" for m in recent_messages)
 
     # Bind the schema to force a true/false guardrail output
