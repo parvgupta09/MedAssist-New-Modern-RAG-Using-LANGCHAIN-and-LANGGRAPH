@@ -7,7 +7,7 @@ MedAssist is an intelligent, state-machine-driven medical triage backend. Built 
 ---
 
 ## 🏛️ System Architecture & Data Flow
-![Architectural Workflow]()
+![Architectural Workflow](https://github.com/parvgupta09/MedAssist-New-Modern-RAG-Using-LANGCHAIN-and-LANGGRAPH/blob/main/image.png)
 
 ## 📊 How It Works
 
