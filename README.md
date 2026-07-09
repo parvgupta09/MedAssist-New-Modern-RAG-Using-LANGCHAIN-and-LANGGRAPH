@@ -1,3 +1,14 @@
+# MedAssist: Modern RAG-Powered Medical Triage Engine
+
+MedAssist is an intelligent, state-machine-driven medical triage backend. Built with LangGraph and FastAPI, it leverages a Tri-Tier LLM architecture and Retrieval-Augmented Generation (RAG) to safely evaluate symptoms, narrow down potential diagnoses, and recommend local specialists—all while strictly enforcing medical safety guardrails and contextual session timeouts.
+
+**Disclaimer**: MedAssist is an AI-assisted informational tool, not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for medical concerns.
+
+---
+
+## 🏛️ System Architecture & Data Flow
+![Architectural Workflow]()
+
 ## 📊 How It Works
 
 1. **Sign up / Log in** — JWT-based auth, tracks age/gender/history per user
@@ -122,7 +133,3 @@ LANGCHAIN_PROJECT=MedAssist-New-Modern-RAG-Using-LANGCHAIN-and-LANGGRAPH
 
 - Issues: open a GitHub issue
 - Email: parvguptajpr@gmail.com
-
----
-
-**Disclaimer**: MedAssist is an AI-assisted informational tool, not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for medical concerns.
