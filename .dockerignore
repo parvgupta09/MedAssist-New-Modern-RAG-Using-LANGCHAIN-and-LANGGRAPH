@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+.vscode/
+.python-version
+chroma_db/
+generated_reports/
+.env
+.git/
+.gitignore
+image.png
+README.md
